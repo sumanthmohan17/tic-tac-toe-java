@@ -416,6 +416,7 @@
             sound.button();
             closeResultModal();
             state.round++;
+            dom.roundIndicator.textContent = `Round ${state.round}`;
             restartRound();
             if (state.mode === 'HUMAN_VS_HUMAN') {
                 const pXName = state.player1Symbol === 'X' ? state.player1Name : state.player2Name;
