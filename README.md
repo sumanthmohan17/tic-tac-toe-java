@@ -4,6 +4,14 @@ A clean, modern, and high-performance **Java Full-Stack Tic-Tac-Toe** game featu
 
 ---
 
+## 🌐 Live Demo
+
+👉 **[https://tic-tac-toe-java-au8d.onrender.com](https://tic-tac-toe-java-au8d.onrender.com)**
+
+*Hosted as a free-tier Docker web service on [Render](https://render.com). Note: the free instance spins down after periods of inactivity, so the first request after idling may take up to ~50 seconds to wake up.*
+
+---
+
 ## ✨ Features
 
 1. **📖 Interactive Rules & Regulations Modal**:
@@ -50,6 +58,8 @@ A clean, modern, and high-performance **Java Full-Stack Tic-Tac-Toe** game featu
   - `GET  /api/health` - Server health check.
 - **Frontend**: Semantic HTML5, Glassmorphism CSS3 with CSS variables & keyframe animations, Vanilla JavaScript (ES6+), Web Audio API, and Canvas API.
 - **Build System**: Standard Maven `pom.xml` + Standalone batch/bash scripts.
+- **Containerization**: Multi-stage **Dockerfile** (Maven build stage → lightweight Eclipse Temurin JRE runtime stage).
+- **Deployment**: Hosted on **Render** as a Dockerized web service, reading the `PORT` environment variable at runtime for platform compatibility.
 
 ---
 
@@ -88,14 +98,45 @@ Then open your browser and navigate to:
 
 ---
 
+### Option 4: 🐳 Run with Docker
+
+The project ships with a multi-stage `Dockerfile` (Maven build → Eclipse Temurin JRE runtime), the same setup used for the live deployment above.
+
+```bash
+# 1. Build the image
+docker build -t tic-tac-toe .
+
+# 2. Run the container
+docker run -p 8080:8080 -e PORT=8080 tic-tac-toe
+```
+Then open your browser and navigate to:
+👉 **`http://localhost:8080`**
+
+*The app reads the `PORT` environment variable at startup (falling back to `8080` if unset), making it compatible with cloud platforms like Render, Railway, or Fly.io that inject their own port at runtime.*
+
+---
+
+## 📦 Deploying Your Own Instance
+
+This project is ready to deploy as-is on any Docker-friendly platform (Render, Railway, Fly.io, etc.):
+
+1. Fork/clone this repository and push it to your own GitHub account.
+2. Create a new **Web Service** on your platform of choice, selecting **Docker** as the runtime/language.
+3. Point it at the repo root — no custom build/start commands needed, the `Dockerfile` handles everything.
+4. Deploy. The app will automatically bind to whatever port the platform provides via the `PORT` environment variable.
+
+---
+
 ## 📁 Project Structure
 
 ```
 Tic tac toe/
+├── Dockerfile                            # Multi-stage build: Maven build → JRE runtime
 ├── pom.xml                               # Standard Maven project configuration
 ├── run.bat                               # Windows 1-click compile & launch script
 ├── run.sh                                # Linux/macOS compile & launch script
 ├── README.md                             # Documentation & user guide
+├── .gitignore                            # Excludes build output (bin/, target/) from version control
 └── src/
     └── main/
         ├── java/
@@ -119,3 +160,5 @@ Tic tac toe/
                 └── js/
                     └── app.js            # Client-side engine, REST API client & audio synth
 ```
+
+> **Note:** `bin/` and `target/` are compiled build artifacts and are intentionally excluded from version control via `.gitignore`. They are regenerated automatically whenever you build or run the project.
